@@ -1,0 +1,18 @@
+.client-table {
+  position: sticky;
+  left: 5vw;
+  width: 90vw;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  z-index: 0;
+}
+#parent {
+  overflow-y: scroll;
+  height: 90vh;
+  z-index: 0;
+  position: relative;
+}
+#table-top {
+  z-index: 0;
+  background-color: #F7CE3E;
+}
