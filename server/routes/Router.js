@@ -2,11 +2,11 @@ const express = require(`express`)
 const router = express.Router()
 const mongoose = require(`mongoose`)
 const Client = require(`../models/Client.js`)
-mongoose.connect(`mongodb://localhost/crmDB`, { useNewUrlParser: true })
+mongoose.connect(`mongodb://loca    lhost/crmDB`, { useNewUrlParser: true })
 
 router.get(`/sanity`, function (req, res) {
     console.log(`im working`)
-    res.send(`worging normaly`)
+    res.send(`"Hi you have reached sanity leave a messege"`)
 })
 router.get(`/`, function (req, res) {
     res.send(`working`)
