@@ -2,60 +2,63 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 import '../styles/Clients.css'
 import Axios from 'axios';
+import Lslogic from '../logic/LocalStorage'
+import Client from './Client/Client';
+import Popup from './Client/Popup';
 class Clients extends Component {
     state = {
         data: [],
+        indexer: [],
+        input: localStorage.filter || ``,
+        client:{
+            popup:false,
+        }
     }
     fetchData = async () => {
         let data = await Axios.get(`http://localhost:4000/clients`).catch(err => console.log(err))
-        // console.log(data.data)
         this.setState({ data: data.data })
-        // setTimeout(() => {
-        //   let data = require('../react-crm-starter-master/data.json')
-        //   //populate state with data
-        //   this.setState({data:data})
-        // }, 100)
     }
     componentDidMount = async () => {
         await this.fetchData()
-        this.sorter()
+        let newData = Lslogic.sorter(this.state.data, ``, `name`)
+        let newIndexer = Lslogic.filter(this.state.data, ``)
+        this.setState({
+            data: newData,
+            indexer: newIndexer
+        })
     }
     sorter = e => {
-        if(!localStorage.sortType){
-            // console.log(`got it`)
-            localStorage.setItem(`sortType`,`name`)
-        }
-        let type = localStorage.sortType
-        let check = false
-        if (e) {
-            type = e.target.value
-            localStorage.setItem(`sortType`,type)
-        } 
-        console.log(type)
-        const sortData = [...this.state.data]
-        sortData.sort((c1, c2) => {
-            if (type == `sername`) {
-                type = `name`
-                check = true
-            }
-            if (!c1[type]) { return 1 }
-            if (!c2[type]) { return -1 }
-            let thing1 = c1[type].toUpperCase()
-            let thing2 = c2[type].toUpperCase()
-            if (check) {
-                thing1 = thing1.split(` `)[1]
-                thing2 = thing2.split(` `)[1]
-            }
-            // console.log(thing1)
-            return thing1 > thing2 ? 1 : thing2 > thing1 ? -1 : 0
+        let newData = Lslogic.sorter(this.state.data, e.target.value)
+        let newIndexer = Lslogic.filter(this.state.data)
+        this.setState({
+            data: newData,
+            indexer: newIndexer
         })
-        this.setState({ data: sortData })
+    }
+    filter = e => {//using startswith() is n^2, using tree can be less , use tree?
+        // fliter has 2 params: place-is place , param -looking for(localStorge.filter)
+        if(!e.target.value){
+            Lslogic.filterRes()
+        }
+        let newIndexer = Lslogic.filter(this.state.data, e.target.value)
+        this.setState({
+            indexer: newIndexer,
+            input: e.target.value
+        })
+    }
+    popupCheck=(client={})=>{
+        if(!this.state.client.popup){
+            client.popup = true
+        }else{
+            client.popup = false            
+        }
+        this.setState({client:client})
     }
     render() {
-        // console.log(this.props.state.data)
-        // this.props.fetchData
         return (
             <div>
+                <Popup client={this.state.client} popupCheck={this.popupCheck}/>
+                <input type="text" placeholder="Search" value={this.state.input} onChange={this.filter} />
                 <select onChange={this.sorter} defaultValue={localStorage.sortType}>
                     <option value="name">Name</option>
                     <option value="country">Country</option>
@@ -66,7 +69,7 @@ class Clients extends Component {
                 </select>
                 <div className="client-table" id="table-top" >
                     <span>Name</span>
-                    <span>Sername</span>
+                    <span>Surname</span>
                     <span>Country</span>
                     <span>First Contact</span>
                     <span>E-mail</span>
@@ -74,19 +77,19 @@ class Clients extends Component {
                     <span>Owner</span>
                 </div>
                 <div id="parent">
-                    {this.state.data.map(client => {
+                    {/* {this.state.data.length < 1 ? ( */}
+                    {this.state.indexer.map(client => {
+                        client = this.state.data[client]
                         return (
-                            <Link to={`/client/${client._id}`} className="client-table" id="table-body">
-                                <span>{client.name.split(` `)[0]}</span>
-                                <span>{client.name.split(` `)[1]}</span>
-                                <span>{client.country}</span>
-                                <span>{client.firstContact}</span>
-                                <span>{client.emailType}</span>
-                                <span>{`${client.sold}`}</span>
-                                <span>{client.owner}</span>
-                            </Link>
+                            <Client client={client} popupCheck={this.popupCheck}/>
                         )
                     })}
+                    {/* ) : (
+                            <div className="spinner">
+                                <div className="cube1"></div>
+                                <div className="cube2"></div>
+                            </div>
+                        )} */}
                 </div>
             </div>
         )

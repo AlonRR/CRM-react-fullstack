@@ -1,0 +1,17 @@
+.update,
+.add {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 70%;
+  position: relative;
+  left: 15%;
+  gap: 3%;
+}
+.add {
+  padding-top: 5%;
+}
+h1 {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  position: center;
+}
