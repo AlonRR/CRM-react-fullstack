@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import './App.css';
 import Clients from './components/Clients';
 import Analytics from './components/Analytics';
 import Actions from './components/Actions';
 import Axios from 'axios';
-import Client from './components/Client/Client';
+// import Client from './components/Client/Client';
 // import data from '../react-crm-starter-master/data.json';
 class App extends Component {
   state = {
@@ -41,7 +41,7 @@ class App extends Component {
             <Route exact path="/clients" render={() => <Clients fetchData={this.fetchData} />} />
             <Route exact path="/actions" render={() => <Actions state={state} />} />
             <Route exact path="/analytics" render={() => <Analytics state={state} />} />
-            <Route exact path="/client/:id" render={({ match }) => <Clients><Client match={match} /></Clients>} />
+            {/* <Route exact path="/client/:id" render={({ match }) => <Clients><Client match={match} /></Clients>} /> */}
           </div>
         </div>
       </Router>

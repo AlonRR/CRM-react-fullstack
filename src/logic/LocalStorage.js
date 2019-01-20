@@ -10,7 +10,7 @@ class LSlogic {
         }
         data.sort((c1, c2) => {
             let check = false
-            if (sortBy === `sername`) {
+            if (sortBy === `surname`) {
                 sortBy = `name`
                 check = true
             }
@@ -42,7 +42,7 @@ class LSlogic {
         let LSType = localStorage.sortType
         data.map((client, i) => {
             let place
-            if (LSType === `sername`) {
+            if (LSType === `surname`) {
                 place = client.name.split(` `)
                 place = place[1].toLowerCase()
             } else if (client[LSType]) {

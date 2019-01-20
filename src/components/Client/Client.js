@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+// import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 import '../../styles/Client.css'
 class Client extends Component {//props: client:{}, popupCheck()
     popupCheck=()=>{
+        // console.log(this.props.client)
         this.props.popupCheck(this.props.client)
     }
     render() {

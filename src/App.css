@@ -5,7 +5,7 @@
 }
 .top-bar {
   background-color: #0a1612;
-  height: 50px;
+  height: 10vh;
   position: relative;
 }
 .top-bar > a {
