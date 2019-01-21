@@ -1,14 +1,7 @@
 class LSlogic {
     sorter = (data, sortBy, def) => {//gets obj sortBy-(filter), data-DB, def-defalt val
-        if (!localStorage.sortType && !sortBy) {
-            localStorage.setItem(`sortType`, def)
-            sortBy = def
-        } else if (sortBy) {
-            localStorage.setItem(`sortType`, sortBy)
-        } else {
-            sortBy = localStorage.sortType
-        }
-        data.sort((c1, c2) => {
+        sortBy = this.setItem(sortBy, `sortType`, def)
+        data = data.sort((c1, c2) => {
             let check = false
             if (sortBy === `surname`) {
                 sortBy = `name`
@@ -21,6 +14,7 @@ class LSlogic {
             if (check) {
                 thing1 = thing1.split(` `)[1]
                 thing2 = thing2.split(` `)[1]
+                sortBy = `surname`
             }
             return thing1 > thing2 ? 1 : thing2 > thing1 ? -1 : 0
         })
@@ -29,14 +23,14 @@ class LSlogic {
     }
     filter = (data, filterBy) => {//using startswith() is n^2, using tree can be less , use tree?
         // fliter has 2 params: place-is place , param -looking for(localStorge.filter)
-        if(!localStorage.filter && !filterBy){
-            let newIndexer =data.map((c,i)=>i)
+        if (!localStorage.filter && !filterBy) {
+            let newIndexer = data.map((c, i) => i)
             // console.log(newIndexer)
             return newIndexer
-        } else if(!filterBy){
+        } else if (!filterBy) {
             filterBy = localStorage.filter
         } else {
-            localStorage.setItem(`filter`,filterBy)
+            localStorage.setItem(`filter`, filterBy)
         }
         let indexer = []
         let LSType = localStorage.sortType
@@ -48,7 +42,7 @@ class LSlogic {
             } else if (client[LSType]) {
                 place = client[LSType].toLowerCase()
             } else {
-                return
+                return null
             }
             if (place.startsWith(filterBy)) {
                 indexer.push(i)
@@ -57,7 +51,18 @@ class LSlogic {
         // console.log(indexer)
         return indexer
     }
-    filterRes=()=>{localStorage.setItem(`filter`,``)}
+    filterRes = () => { localStorage.setItem(`filter`, ``) }
+    setItem = (name, key, def) => {
+        if (!localStorage[key] && !name) {
+            localStorage.setItem(key, def)
+            return def
+        } else if (name) {
+            localStorage.setItem(key, name)
+            return name
+        } else {
+            return localStorage[key]
+        }
+    }
 }
-const Lslogic = new LSlogic
+const Lslogic = new LSlogic()
 export default Lslogic
