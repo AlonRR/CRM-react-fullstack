@@ -3,29 +3,40 @@ import React, { Component } from 'react'
 import '../styles/Analytics.css'
 import Axios from 'axios';
 import Charts from './Analytics/Charts';
+import Badges from './Analytics/Badges'
 class Analytics extends Component {
     state = {
         analytics: {
-            data:{
-                hottestCountry: ``
-            }
+            badges: {
+                hottestCountry: ``,
+                newClients: ``,
+                outstandingClients: ``,
+                emailsSent: ``,
+            },
+            // data: {
+                // country:{},
+                // owner:{},
+                // month:{}
+            // }
         }
     }
-    componentDidMount =async () => {
-       await this.fetchData()
+    componentDidMount = async () => {
+        await this.fetchData()
     }
     fetchData = () => {
         console.log(`here`)
         Axios.get(`http://localhost:4000/analytics`)
             .then(res => {
-                this.setState({ analytics: res })
+                this.setState({ analytics: res.data })
+                // console.log(res)
             })
     }
     render() {
         return (
             <div>
-                <Charts hottestCountry={this.state.analytics.data.hottestCountry} />
-                Analytics here
+                <Badges badges={this.state.analytics.badges} />
+                {this.state.analytics.data?<Charts data={this.state.analytics.data} />:null}
+                {/* Analytics here */}
             </div>
         )
     }

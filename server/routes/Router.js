@@ -2,6 +2,7 @@ const express = require(`express`)
 const router = express.Router()
 const mongoose = require(`mongoose`)
 const Client = require(`../models/Client.js`)
+const analytics = require(`../logic/analytics`)
 mongoose.connect(`mongodb://localhost/crmDB`, { useNewUrlParser: true })
 
 router.get(`/sanity`, function (req, res) {
@@ -32,21 +33,13 @@ router.put(`/client`, function (req, res) {
     )
 })
 router.get(`/analytics`,async function(req,res){
-    let analytics = {}
     let data = await Client.find()
     // console.log(data)
     // analytics.newClients = data.count(client=>client.firstContact>new Date(2018,09,01))
     //sales by country
-    analytics.hottestCountry={}
-    data.map(client=>{
-        if(!analytics.hottestCountry[client.country]){
-            analytics.hottestCountry[client.country] = 1
-        } else{
-            analytics.hottestCountry[client.country] += 1
-        }
-    })
-    // console.log(analytics)
-    res.send(analytics)
+    let sortedData = await analytics.module.dataSorter(data)
+    // console.log(sortedData)
+    res.send(sortedData)
 })
 
 
