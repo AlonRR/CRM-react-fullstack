@@ -2,12 +2,14 @@ import React, { Component } from 'react'
 import Item from './Charts/ChartByItem';
 import Lslogic from '../../logic/LocalStorage';
 import moment from 'moment';
+import SalesByDate from './Charts/SalesByDate';
 // import { BrowserRouter as Router, Route,Link, Redirect } from 'react-router-dom'
 // import '../styles/Charts.css'
 class Charts extends Component {//props:{ data:{}}
     state = {
         item: localStorage.chartItem || ``,
-        type: []
+        type: [],
+        sales: [],
     }
     componentDidMount = () => {
         this.sxa()
@@ -21,20 +23,33 @@ class Charts extends Component {//props:{ data:{}}
         let item = { ...this.props.data[this.state.item] }
         let newCountry = []
         for (let name in item) {
-            newCountry.push({ name: name.replace(` `,`\n`), num: item[name] })
+            newCountry.push({ name: name.replace(` `, `\n`), num: item[name] })
         }
         if (this.state.item !== `month`) {
             newCountry = newCountry.sort((c1, c2) => c1.num > c2.num ? 1 : -1)
-            console.log(newCountry)
+            // console.log(newCountry)
         } else {
             newCountry = newCountry.map(c => {
-                c.name = moment(c.name,`M`).format(`MMM`)
-                console.log(c.name)
-            return c
+                c.name = moment(c.name, `M`).format(`MMM`)
+                // console.log(c.name)
+                return c
             })
-            console.log(newCountry)
+            // console.log(newCountry)
         }
-        this.setState({ type: newCountry })
+        let newSales = {...this.props.sales}
+        newSales = Object.keys(newSales).map((c,i) => {
+            c = { name: c, num: newSales[c] }
+            return c
+        })
+        newSales.sort((c1, c2) => c1.name > c2.name ? 1 : -1)
+        newSales = newSales.map(c=>{
+            c.name = moment(c.name,`YYYYMM`).format(`MMM-YY`)
+            return c
+        })
+        this.setState({
+            type: newCountry,
+            sales: newSales
+        })
     }
     render() {
         return (
@@ -46,6 +61,7 @@ class Charts extends Component {//props:{ data:{}}
                     <option value="month">Month</option>
                 </select>
                 <Item item={this.state.type} />
+                <SalesByDate sales={this.state.sales} />
                 {/* hi */}
             </div>
         )

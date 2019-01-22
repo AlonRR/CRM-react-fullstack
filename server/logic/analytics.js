@@ -7,8 +7,9 @@ class Analytics {
                 country: {},
                 owner: {},
                 emailType: {},
-                month: {}
+                month: {},
             },
+            sales: {},
             badges: {
                 hottestCountry: ``,//
                 newClients: 0,//
@@ -23,12 +24,20 @@ class Analytics {
                 badges.outstandingClients += 1
                 Object.keys(allData).forEach(item => {
                     if (item === `month`) {
-                        let numMonth = client.firstContact.getMonth()+1
-                        console.log(numMonth)
+                        // newData.sales.push(client.firstContact)
+                        let numMonth = client.firstContact.getMonth() + 1
+                        let numYear = client.firstContact.getUTCFullYear()
+                        // console.log(numYear)
+                        // console.log(numMonth)
                         if (!allData.month[numMonth]) {
                             allData.month[numMonth] = 1
-                        } else{
+                        } else {
                             allData.month[numMonth] += 1
+                        }
+                        if(!newData.sales[`${numYear}${numMonth}`]){
+                            newData.sales[`${numYear}${numMonth}`] = 1
+                        } else {
+                            newData.sales[`${numYear}${numMonth}`] += 1
                         }
                     } else if (!allData[item][client[item]]) {
                         allData[item][client[item]] = 1

@@ -6,7 +6,7 @@ class Item extends Component {//props:{ item:{}}
     render() {
         return (
             <div id="item-chart">
-                <ResponsiveContainer width="200%" height={200} >
+                <ResponsiveContainer width="100%" height={300} >
                     <BarChart data={this.props.item}>
                         {/* <CartesianGrid strokeDasharray="3 3" /> */}
                         <XAxis dataKey="name" interval={0} textAnchor="start" angle={45} />

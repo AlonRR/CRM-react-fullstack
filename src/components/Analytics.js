@@ -17,7 +17,8 @@ class Analytics extends Component {
                 // country:{},
                 // owner:{},
                 // month:{}
-            // }
+            // },
+            // sales:[]
         }
     }
     componentDidMount = async () => {
@@ -28,14 +29,14 @@ class Analytics extends Component {
         Axios.get(`http://localhost:4000/analytics`)
             .then(res => {
                 this.setState({ analytics: res.data })
-                // console.log(res)
+                console.log(res)
             })
     }
     render() {
         return (
             <div>
                 <Badges badges={this.state.analytics.badges} />
-                {this.state.analytics.data?<Charts data={this.state.analytics.data} />:null}
+                {this.state.analytics.data?<Charts data={this.state.analytics.data}  sales={this.state.analytics.sales} />:null}
                 {/* Analytics here */}
             </div>
         )
