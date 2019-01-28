@@ -35,16 +35,16 @@ class LSlogic {
         let indexer = []
         let LSType = localStorage.sortType
         data.map((client, i) => {
-            let place
+            let catagory
             if (LSType === `surname`) {
-                place = client.name.split(` `)
-                place = place[1].toLowerCase()
+                catagory = client.name.split(` `)
+                catagory = catagory[1].toLowerCase()
             } else if (client[LSType]) {
-                place = client[LSType].toLowerCase()
+                catagory = client[LSType].toLowerCase()
             } else {
                 return null
             }
-            if (place.startsWith(filterBy)) {
+            if (catagory.startsWith(filterBy)) {
                 indexer.push(i)
             }
         })
